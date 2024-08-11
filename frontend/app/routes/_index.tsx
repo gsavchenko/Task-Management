@@ -1,48 +1,41 @@
 import type { MetaFunction } from "@remix-run/node";
+import { useTasks } from "~/modules/api/task.queries";
+import { Task } from "~/modules/tasks/task.component";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Tasks App" },
+    {
+      name: "description",
+      content:
+        "A simple task management app built with Remix and Tailwind CSS.",
+    },
   ];
 };
 
 export default function Index() {
-  return (
-    <div className="font-sans p-4">
-      <h1 className="text-3xl">Welcome to Remix</h1>
-      <ul className="list-disc mt-4 pl-6 space-y-2">
-        <li>
-          <a
-            className="text-blue-700 underline visited:text-purple-900"
-            target="_blank"
-            href="https://remix.run/start/quickstart"
-            rel="noreferrer"
-          >
-            5m Quick Start
-          </a>
-        </li>
-        <li>
-          <a
-            className="text-blue-700 underline visited:text-purple-900"
-            target="_blank"
-            href="https://remix.run/start/tutorial"
-            rel="noreferrer"
-          >
-            30m Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            className="text-blue-700 underline visited:text-purple-900"
-            target="_blank"
-            href="https://remix.run/docs"
-            rel="noreferrer"
-          >
-            Remix Docs
-          </a>
-        </li>
-      </ul>
-    </div>
-  );
+  const { error, data: tasks } = useTasks();
+
+  if (tasks)
+    return (
+      <div className="bg-gray-100 min-h-screen">
+        <h1 className="text-4xl font-bold text-center py-8 text-blue-600">
+          My Tasks
+        </h1>
+        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {tasks.map((task) => (
+            <Task key={task.id} task={task} />
+          ))}
+        </div>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="text-red-500 text-center py-8">
+        Oops... Something went wrong!
+      </div>
+    );
+
+  return <div className="text-gray-500 text-center py-8">Loading...</div>;
 }
