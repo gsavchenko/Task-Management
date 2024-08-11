@@ -1,3 +1,4 @@
+import { useDeleteTaskMutation } from "../api/tasks";
 import * as Models from "../models";
 
 type TaskProps = {
@@ -5,8 +6,14 @@ type TaskProps = {
 };
 
 export const Task = ({ task }: TaskProps) => {
+  const { mutate } = useDeleteTaskMutation();
+
+  const handleDelete = () => {
+    mutate(task.id);
+  };
+
   return (
-    <div className="bg-white shadow-md rounded-lg p-6">
+    <div className="bg-white shadow-md rounded-lg p-6 relative">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">
         {task.title}
       </h2>
@@ -24,6 +31,12 @@ export const Task = ({ task }: TaskProps) => {
           </span>
         </p>
       </div>
+      <button
+        onClick={handleDelete}
+        className="absolute bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-md opacity-10 hover:opacity-100 transition-opacity duration-300"
+      >
+        Delete
+      </button>
     </div>
   );
 };

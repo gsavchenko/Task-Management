@@ -14,20 +14,37 @@ const addTask = async (newTask: Omit<Models.Task, "id">) => {
   return response.data;
 };
 
+const deleteTask = async (taskId: string) => {
+  await axios.delete(`${API_URL}/${taskId}`);
+};
+
+export const taskKeys = {
+  all: ["tasks"] as const,
+};
+
 export const useGetTaskQuery = () => {
   return useQuery({
-    queryKey: ["tasks"],
+    queryKey: taskKeys.all,
     queryFn: fetchTasks,
   });
 };
 
 export const usePostTaskMutation = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: addTask,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: taskKeys.all });
+    },
+  });
+};
+
+export const useDeleteTaskMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: taskKeys.all });
     },
   });
 };
