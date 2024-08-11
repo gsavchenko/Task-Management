@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import { useTasks } from "~/modules/api/task.queries";
+import { useGetTaskQuery } from "~/modules/api/tasks";
 import { Task } from "~/modules/tasks/task.component";
 
 export const meta: MetaFunction = () => {
@@ -14,7 +14,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  const { error, data: tasks } = useTasks();
+  const { error, data: tasks } = useGetTaskQuery();
 
   if (tasks)
     return (

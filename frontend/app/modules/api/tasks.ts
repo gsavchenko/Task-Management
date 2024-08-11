@@ -9,7 +9,7 @@ const fetchTasks = async (): Promise<Models.Task[]> => {
   return response.data;
 };
 
-export const useTasks = () => {
+export const useGetTaskQuery = () => {
   return useQuery({
     queryKey: ["tasks"],
     queryFn: fetchTasks,
