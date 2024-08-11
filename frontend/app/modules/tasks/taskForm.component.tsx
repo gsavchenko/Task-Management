@@ -11,8 +11,7 @@ export const TaskForm = () => {
     setIsLoading(true);
 
     const formData = new FormData(event.currentTarget);
-    const task: Models.Task = {
-      id: "",
+    const task: Omit<Models.Task, "id"> = {
       title: formData.get("title") as string,
       description: formData.get("description") as string,
       status: formData.get("status") as "todo" | "inProgress" | "done",
